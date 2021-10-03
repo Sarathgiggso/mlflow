@@ -13,7 +13,14 @@ docker run -d -p 5000:5000 --name mlflow mlflow
 
 ```
 
+**kubernetes**
 
+```bash
+
+kubectl apply -f mlflow-kubernetes.yml
+kubectl get all -n mlflow
+
+```
 
 Documentation
 
