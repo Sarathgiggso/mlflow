@@ -1,1 +1,91 @@
-```
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/project: ml
+    app.kubernetes.io/usage: mlflow
+  name: mlflow
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  minReadySeconds: 10
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 3
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mlflow
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mlflow
+    spec:
+      serviceAccountName: mlflow
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      containers:
+      - name: mlflow
+        image: containerImageName
+        ports:
+        - containerPort: 5000
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        # readinessProbe:
+        #   tcpSocket:
+        #     port: 8082
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 10
+        # livenessProbe:
+        #   tcpSocket:
+        #     port: 80
+        #   initialDelaySeconds: 15
+        #   periodSeconds: 20
+        # resources:
+        #   limits:
+        #     memory: 200Mi
+        #     cpu: 250m
+        #   requests:
+        #     memory: 100Mi
+        #     cpu: 200m
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/project: ml
+    app.kubernetes.io/usage: mlflow
+  name: mlflow
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/project: ml
+    app.kubernetes.io/usage: mlflow
+  name: mlflow
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: mlflow
+  ports:
+  - port: 80
+    targetPort: 5000
