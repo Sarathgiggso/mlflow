@@ -39,7 +39,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: mlflow
-        image: containerImageName
+        image: jjino/mlflow # containerImageName
         ports:
         - containerPort: 5000
         env:
