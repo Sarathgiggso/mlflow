@@ -12,3 +12,9 @@ docker build -t mlflow .
 docker run -d -p 5000:5000 --name mlflow mlflow
 
 ```
+
+
+
+Documentation
+
+    https://mlflow.org/docs/latest/quickstart.html#installing-mlflow
