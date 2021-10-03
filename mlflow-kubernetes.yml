@@ -94,9 +94,9 @@ metadata:
   name: mlflow
   namespace: mlflow
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app.kubernetes.io/name: mlflow
   ports:
-  - port: 80
-    targetPort: 5000
+  - port: 5000
+#    targetPort: 5000
