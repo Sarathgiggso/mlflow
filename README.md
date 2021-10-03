@@ -1,2 +1,14 @@
 # mlflow
-this is mlflow repository
+
+
+```bash
+
+# Build the docker image
+
+docker build -t mlflow .
+
+# Run the docker container
+
+docker run -d -p 5000:5000 --name mlflow mlflow
+
+```
